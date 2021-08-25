@@ -1,0 +1,524 @@
+openapi: 3.0.0
+info:
+  description: |
+    Bolly's Shopping List
+  version: 1.0.0-oas3
+  title: Bolly's Shopping List
+  contact:
+    email: ben@benmulhern.co.uk
+  license:
+    name: Apache 2.0
+    url: 'http://www.apache.org/licenses/LICENSE-2.0.html'
+tags:
+  - name: meal
+    description: Work with meals
+  - name: list-item
+    description: Work with list items
+  - name: user-action
+    description: Work with user actions
+paths:
+  /meal:
+    post:
+      tags:
+        - meal
+      summary: Add a new meal
+      operationId: addMeal
+      parameters:
+        - name: api_key
+          in: header
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Meal'
+        description: Meal object to be added
+        required: true
+      responses:
+        '405':
+          description: Invalid input
+#      security:
+#        - petstore_auth:
+#            - 'write:pets'
+#            - 'read:pets'
+  '/meal/{mealId}':
+    put:
+      tags:
+        - meal
+      summary: Edit a meal
+      description: Edit a meal
+      operationId: editMeal
+      parameters:
+        - name: api_key
+          in: header
+          required: true
+          schema:
+            type: string
+        - name: mealId
+          in: path
+          description: ID of meal to edit
+          required: true
+          schema:
+            $ref: '#/components/schemas/UniqueId'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Meal'
+        description: Updated meal object
+        required: true
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Meal'
+        '400':
+          description: Invalid meal ID supplied
+        '404':
+          description: Meal not found
+#      security:
+#        - petstore_auth:
+#            - 'write:pets'
+#            - 'read:pets'
+    delete:
+      tags:
+        - meal
+      summary: Deletes a meal
+      operationId: deleteMeal
+      parameters:
+        - name: api_key
+          in: header
+          required: true
+          schema:
+            type: string
+        - name: mealId
+          in: path
+          description: Meal id to delete
+          required: true
+          schema:
+            $ref: '#/components/schemas/UniqueId'
+      responses:
+        '400':
+          description: Invalid meal ID supplied
+        '404':
+          description: Meal not found
+#      security:
+#        - petstore_auth:
+#            - 'write:pets'
+#            - 'read:pets'
+  /list-item:
+    post:
+      tags:
+        - list-item
+      summary: Add a new list item
+      operationId: addListItem
+      parameters:
+        - name: api_key
+          in: header
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ListItem'
+        description: List item object to be added
+        required: true
+      responses:
+        '405':
+          description: Invalid input
+#      security:
+#        - petstore_auth:
+#            - 'write:pets'
+#            - 'read:pets'
+    delete:
+      tags:
+        - list-item
+      summary: Deletes entire list of open items
+      operationId: deleteOpenListItems
+      parameters:
+        - name: api_key
+          in: header
+          required: true
+          schema:
+            type: string
+      responses:
+        '204':
+          description: Successfully deleted open list entries
+#      security:
+#        - petstore_auth:
+#            - 'write:pets'
+#            - 'read:pets'
+  '/list-item/{itemId}':
+    put:
+      tags:
+        - list-item
+      summary: Edit a list item
+      description: Edit a list item
+      operationId: editListItem
+      parameters:
+        - name: api_key
+          in: header
+          required: true
+          schema:
+            type: string
+        - name: itemId
+          in: path
+          description: ID of list item to edit
+          required: true
+          schema:
+            $ref: '#/components/schemas/UniqueId'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ListItem'
+        description: Updated list item object
+        required: true
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListItem'
+        '400':
+          description: Invalid item ID supplied
+        '404':
+          description: Item not found
+#      security:
+#        - petstore_auth:
+#            - 'write:pets'
+#            - 'read:pets'
+    delete:
+      tags:
+        - list-item
+      summary: Deletes a list item
+      operationId: deleteListItem
+      parameters:
+        - name: api_key
+          in: header
+          required: true
+          schema:
+            type: string
+        - name: itemId
+          in: path
+          description: Item id to delete
+          required: true
+          schema:
+            $ref: '#/components/schemas/UniqueId'
+      responses:
+        '204':
+          description: Successfully deleted item
+        '400':
+          description: Invalid item ID supplied
+        '404':
+          description: Item not found
+#      security:
+#        - petstore_auth:
+#            - 'write:pets'
+#            - 'read:pets'
+  '/list-item/{itemId}/tick-mark':
+    put:
+      tags:
+        - list-item
+      summary: Tick or un-tick a list item
+      description: Tick or un-tick a list item
+      operationId: setListItemTickMark
+      parameters:
+        - name: api_key
+          in: header
+          required: true
+          schema:
+            type: string
+        - name: itemId
+          in: path
+          description: ID of list item to edit
+          required: true
+          schema:
+            $ref: '#/components/schemas/UniqueId'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: boolean
+        description: Boolean to say if ticked or not
+        required: true
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListItem'
+        '400':
+          description: Invalid item ID supplied
+        '404':
+          description: Item not found
+#      security:
+#        - petstore_auth:
+#            - 'write:pets'
+#            - 'read:pets'
+  '/list-item/{itemId}/question-mark':
+    put:
+      tags:
+        - list-item
+      summary: Question or un-question a list item
+      description: Question or un-question a list item
+      operationId: setListItemQuestionMark
+      parameters:
+        - name: api_key
+          in: header
+          required: true
+          schema:
+            type: string
+        - name: itemId
+          in: path
+          description: ID of list item to edit
+          required: true
+          schema:
+            $ref: '#/components/schemas/UniqueId'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: boolean
+        description: Boolean to say if questioned or not
+        required: true
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListItem'
+        '400':
+          description: Invalid item ID supplied
+        '404':
+          description: Item not found
+#      security:
+#        - petstore_auth:
+#            - 'write:pets'
+#            - 'read:pets'
+  /user-action/last:
+    delete:
+      tags:
+        - user-action
+      summary: Delete (undo) the last user action
+      operationId: undoLastAction
+      parameters:
+        - name: api_key
+          in: header
+          required: true
+          schema:
+            type: string
+      responses:
+        '204':
+          description: Successfully undid last action
+        '404':
+          description: Item not found
+#      security:
+#        - petstore_auth:
+#            - 'write:pets'
+#            - 'read:pets'
+#externalDocs:
+#  description: Find out more about Swagger
+#  url: 'http://swagger.io'
+servers:
+  - url: 'https://virtserver.swaggerhub.com/bam-dev/bolly-shopping-list/1.0.0'
+  - url: 'http://virtserver.swaggerhub.com/bam-dev/bolly-shopping-list/1.0.0'
+components:
+#  requestBodies:
+#    UserArray:
+#      content:
+#        application/json:
+#          schema:
+#            type: array
+#            items:
+#              $ref: '#/components/schemas/User'
+#      description: List of user object
+#      required: true
+#  securitySchemes:
+#    petstore_auth:
+#      type: oauth2
+#      flows:
+#        implicit:
+#          authorizationUrl: 'http://petstore.swagger.io/oauth/dialog'
+#          scopes:
+#            'write:pets': modify pets in your account
+#            'read:pets': read your pets
+#    api_key:
+#      type: apiKey
+#      name: api_key
+#      in: header
+  schemas:
+    UniqueId:
+      type: integer
+      minimum: 1
+    NonBlankString:
+      type: string
+      minLength: 1
+    Author:
+      type: object
+      required:
+      - name
+      properties:
+        id:
+          $ref: '#/components/schemas/UniqueId'
+        name:
+          $ref: '#/components/schemas/NonBlankString'
+    AuthorOrId:
+      oneOf:
+      - $ref: '#/components/schemas/Author'
+      - $ref: '#/components/schemas/UniqueId'
+    Book:
+      type: object
+      required:
+      - name
+      - author
+      properties:
+        id:
+          $ref: '#/components/schemas/UniqueId'
+        name:
+          type: string
+        author:
+          $ref: '#/components/schemas/AuthorOrId'
+    BookOrId:
+      oneOf:
+      - $ref: '#/components/schemas/Book'
+      - $ref: '#/components/schemas/UniqueId'
+    Quantity:
+      type: number
+      format: double
+      minimum: 0
+      exclusiveMinimum: true
+    Unit:
+      $ref: '#/components/schemas/NonBlankString'
+    Amount:
+      type: object
+      required:
+      - quantity
+      - unit
+      properties:
+        quantity:
+          $ref: '#/components/schemas/Quantity'
+        unit:
+          $ref: '#/components/schemas/Unit'
+    Location:
+      type: object
+      required:
+      - id
+      properties:
+        id:
+          $ref: '#/components/schemas/NonBlankString'
+        shopOrder:
+          $ref: '#/components/schemas/UniqueId'
+    Item:
+      type: object
+      required:
+      - name
+      - location
+      - defaultUnit
+      properties:
+        id:
+          $ref: '#/components/schemas/UniqueId'
+        name:
+          $ref: '#/components/schemas/NonBlankString'
+        location:
+          $ref: '#/components/schemas/Location'
+        defaultUnit:
+          $ref: '#/components/schemas/Unit'
+        defaultQuestionMark:
+          type: boolean
+          default: false
+    ItemOrId:
+      oneOf:
+      - $ref: '#/components/schemas/Item'
+      - $ref: '#/components/schemas/UniqueId'
+    ItemAmount:
+      type: object
+      required:
+      - item
+      - amount
+      properties:
+        item:
+          $ref: '#/components/schemas/ItemOrId'
+        amount:
+          $ref: '#/components/schemas/Amount'
+    MealOrId:
+      oneOf:
+      - $ref: '#/components/schemas/Meal'
+      - $ref: '#/components/schemas/UniqueId'
+    MealAmount:
+      type: object
+      required:
+      - meal
+      - amount
+      properties:
+        meal:
+          $ref: '#/components/schemas/MealOrId'
+        amount:
+          $ref: '#/components/schemas/Amount'
+    ListItem:
+      type: object
+      required:
+      - item
+      properties:
+        id:
+          $ref: '#/components/schemas/UniqueId'
+        item:
+          $ref: '#/components/schemas/Item'
+        adHocAmount:
+          $ref: '#/components/schemas/Amount'
+        mealAmounts:
+          type: array
+          items:
+            $ref: '#/components/schemas/MealAmount'
+          minItems: 1
+        questionMark:
+          type: boolean
+          default: false
+        tickedAt:
+          type: string
+          format: date-time
+          readOnly: true
+    Meal:
+      type: object
+      required:
+        - name
+        - serves
+        - dietType
+        - mealIngredients
+      properties:
+        id:
+          $ref: '#/components/schemas/UniqueId'
+        name:
+          $ref: '#/components/schemas/NonBlankString'
+        serves:
+          type: integer
+          minimum: 1
+          maximum: 8
+        dietType:
+          type: string
+          enum:
+            - vegetarian
+            - omni
+            - vegan
+        book:
+          $ref: '#/components/schemas/BookOrId'
+        imageUrl:
+          $ref: '#/components/schemas/NonBlankString'
+        tags:
+          type: array
+          items:
+            $ref: '#/components/schemas/NonBlankString'
+        mealIngredients:
+          type: array
+          items:
+            $ref: '#/components/schemas/ItemAmount'
+          minItems: 1
